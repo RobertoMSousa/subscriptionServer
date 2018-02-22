@@ -1,4 +1,6 @@
 module.exports = {
+	verbose: true,
+	mapCoverage: true,
 	globals: {
 		'ts-jest': {
 			tsConfigFile: 'tsconfig.json'
