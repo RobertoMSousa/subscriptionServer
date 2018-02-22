@@ -111,7 +111,6 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
 			if (err) {
 				return next(err);
 			}
-			console.log("user-->", user); // roberto
 			req.logIn(user, (err: Error) => {
 				if (err) {
 					res.status(500).json({message: undefined, error: err.message, data: undefined});
