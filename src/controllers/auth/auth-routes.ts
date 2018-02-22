@@ -1,18 +1,19 @@
+
 import express = require("express");
-import AuthCtrl = require("./auth");
+import authCtrl = require("./auth");
+import * as passport from "passport";
 
 export namespace Routes {
 	export function auth(): express.Router {
 		const router = express.Router();
-
 		router.route("/signin")
-			.post(AuthCtrl.signin);
-
-		router.route("/sigup")
-			.post(AuthCtrl.signup);
+			.post(authCtrl.signin);
 
 		router.route("/signout")
-			.get(AuthCtrl.signout);
+			.get(authCtrl.signout);
+
+		router.route("/signup")
+			.post(authCtrl.signup);
 
 		return router;
 	}

@@ -75,7 +75,7 @@ export const signout = (req: Request, res: Response) => {
  * password -> string
  * passwordRepeated -> string
  */
-export const postSignup = (req: Request, res: Response, next: NextFunction) => {
+export const signup = (req: Request, res: Response, next: NextFunction) => {
 
 	if (!req.body.email) {
 		res.status(403).json({message: "no email provided", error: undefined, data: undefined});
