@@ -1,25 +1,17 @@
 import * as bcrypt from "bcrypt-nodejs";
 import * as crypto from "crypto";
 import * as mongoose from "mongoose";
+import { debug } from "util";
 
+
+
+/*
+TYPES
+*/
 export type UserModel = mongoose.Document & {
 	email: string,
 	password: string,
-	passwordResetToken: string,
-	passwordResetExpires: Date,
-
-	facebook: string,
-	tokens: AuthToken[],
-
-	profile: {
-		name: string,
-		gender: string,
-		location: string,
-		website: string,
-		picture: string
-	},
-
-	comparePassword: (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void
+	comparePassword: (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void,
 };
 
 export type AuthToken = {
@@ -27,25 +19,31 @@ export type AuthToken = {
 	kind: string
 };
 
+export type saltedUser = {
+	_id: mongoose.Types.ObjectId,
+	email: string,
+	isAuthenticated: boolean
+};
+
+/*Mongo Schema*/
 const userSchema = new mongoose.Schema({
 	email: { type: String, unique: true },
-	password: String,
-	passwordResetToken: String,
-	passwordResetExpires: Date,
-
-	facebook: String,
-	twitter: String,
-	google: String,
-	tokens: Array,
-
-	profile: {
-		name: String,
-		gender: String,
-		location: String,
-		website: String,
-		picture: String
+	password: {
+		type: String,
+		required: true
+	},
+	createdAt: {
+		type: Date,
+		default: Date.now
 	}
-}, { timestamps: true });
+});
+
+/*
+function that salt the user to avoid returning the sensive data
+*/
+export function userSalt(user: UserModel): saltedUser {
+	return {_id: user._id, email: user.email, isAuthenticated: true};
+}
 
 /**
  * Password hash middleware.
@@ -69,6 +67,5 @@ userSchema.methods.comparePassword = function (candidatePassword: string, cb: (e
 	});
 };
 
-// export const User: UserType = mongoose.model<UserType>('User', userSchema);
 const User = mongoose.model("User", userSchema);
 export default User;
