@@ -1,10 +1,10 @@
 {
   "name": "subscription_server",
   "version": "0.1.0",
-  "description": "",
+  "description": "A server that manages the user signIn, signUp process allows the user to subscribe to content and display the content only if the subscription is valid and payments up to date.",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/RobertoMSousa/subscriptionServer"
   },
   "engines": {
     "npm": "5.6.0",
