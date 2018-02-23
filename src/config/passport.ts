@@ -1,15 +1,13 @@
 import * as passport from "passport";
 import * as request from "request";
 import * as passportLocal from "passport-local";
-// import * as passportFacebook from "passport-facebook";
 import * as _ from "lodash";
 
-// import { User, UserType } from '../models/User';
-import { default as User } from "../models/User";
+import { default as User, Admin } from "../models/User";
 import { Request, Response, NextFunction } from "express";
+import { cookieCompare } from "tough-cookie";
 
 const LocalStrategy = passportLocal.Strategy;
-// const FacebookStrategy = passportFacebook.Strategy;
 
 passport.serializeUser<any, any>((user, done) => {
 	done(undefined, user.id);
@@ -60,7 +58,7 @@ passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, don
 /**
  * Login Required middleware.
  */
-export let isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
 	if (req.isAuthenticated()) {
 		return next();
 	}
@@ -71,7 +69,7 @@ export let isAuthenticated = (req: Request, res: Response, next: NextFunction) =
 /**
  * Authorization Required middleware.
  */
-export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
+export const isAuthorized = (req: Request, res: Response, next: NextFunction) => {
 	const provider = req.path.split("/").slice(-1)[0];
 
 	if (_.find(req.user.tokens, { kind: provider })) {
@@ -79,4 +77,24 @@ export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
 	} else {
 		res.redirect(`/auth/admin`);
 	}
+};
+
+/**
+ * Admin Authorization Required middleware.
+ * Admin must be created manually on the DB
+ */
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+	if (!req.user) {
+		res.redirect(`/auth/admin`);
+		return;
+	}
+	console.log("email-->", req.user.email); // roberto
+	Admin.findOne({"email" : req.user.email}, (err: Error, admin: any) => {
+		console.log("admin-->", admin); // roberto
+		if (err || !admin) {
+			res.redirect(`/auth/admin`);
+			return;
+		}
+		next();
+	});
 };
