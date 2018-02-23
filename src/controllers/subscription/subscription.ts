@@ -108,7 +108,7 @@ export const planList = (req: Request, res: Response, next: NextFunction) => {
 */
 export const newPlan = (req: Request, res: Response, next: NextFunction) => {
 
-	if (!req.body.name || !req.body.nickname || !req.body.amount) {
+	if (!req.body.name || !req.body.nickname || !req.body.amount || !req.body.currency || !req.body.interval) {
 		res.status(400).json({message: "missing required params", error: undefined, data: undefined});
 		return;
 	}
