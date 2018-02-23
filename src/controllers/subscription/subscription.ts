@@ -40,7 +40,7 @@ export const newSub = (req: Request, res: Response, next: NextFunction) => {
 		res.status(400).json({message: "missing required params", error: undefined, data: undefined});
 		return;
 	}
-	StripeSubscription.find({customer: req.user.stripeId, plan: req.body.plan}, (err: Error, subFind: Array<stripeSubscription>) => {
+	StripeSubscription.find({customer: req.user.stripeId, planId: req.body.plan}, (err: Error, subFind: Array<stripeSubscription>) => {
 		if (err) {
 			res.status(500).json({message: "failed", error: err.message, data: undefined});
 			return;
@@ -68,8 +68,10 @@ export const newSub = (req: Request, res: Response, next: NextFunction) => {
 				object: newSubscription.object,
 				billing: newSubscription.billing,
 				billing_cycle_anchor: newSubscription.billing_cycle_anchor,
+				current_period_start: newSubscription.current_period_start,
+				current_period_end: newSubscription.current_period_end,
 				cancel_at_period_end: newSubscription.cancel_at_period_end,
-				canceled_at: newSubscription.canceled_at,
+				canceled_at: newSubscription.canceled_at ? newSubscription.canceled_at : undefined,
 				created: newSubscription.created,
 				customer: newSubscription.customer,
 				planId: newSubscription.plan.id,
