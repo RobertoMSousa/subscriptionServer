@@ -207,6 +207,7 @@ describe("create plans", () => {
 			});
 		});
 	});
+
 	it("should not be able to create a plan without a valid interval", (done) => {
 		createFakeAdmin((err: Error) => {
 			request(app).post("/auth/signin")
@@ -292,6 +293,88 @@ describe("create plans", () => {
 					chai.expect(res.body.data).to.not.exist;
 					done();
 					return;
+				});
+			});
+		});
+	});
+
+	it("should create a new plan and get the value back", (done) => {
+
+		const planName: string = "myplan";
+		const planNick: string = "planMonth";
+		const planAmount: number = 10;
+		const planCurrency: string = "usd";
+		const planInterval: string = "month";
+
+		createFakeAdmin((err: Error) => {
+			request(app).post("/auth/signin")
+			.set("Accept", "application/json")
+			.set("Content-Type", "application/json")
+			.send({
+				"email": "admin@mail.com",
+				"password": "123"
+			})
+			.expect(200)
+			.expect("Content-Type", /json/)
+			.expect("set-cookie", /connect.sid/)
+			.end(function (err, res) {
+				if (err) {
+					done(err);
+					return;
+				}
+
+				chai.expect(res.body.message).to.equal("login with success");
+
+				request(app).post("/subscription/newplan")
+				.set("Accept", "application/json")
+				.set("Cookie", res.header["set-cookie"])
+				.set("Content-Type", "application/json")
+				.send({
+					"name": planName,
+					"nickname": planNick,
+					"amount": planAmount,
+					"currency": planCurrency,
+					"interval": planInterval
+				})
+				.expect(200)
+				.end(function (err, res) {
+					if (err) {
+						done(err);
+						return;
+					}
+					console.log("plan-->", res.body.data); // roberto
+
+					chai.expect(res.body.message).to.equal("success");
+					chai.expect(res.body.data).to.exist;
+					chai.expect(res.body.error).to.not.exist;
+					chai.expect(res.body.data).to.exist;
+					chai.expect(res.body.data.id).to.exist;
+					chai.expect(res.body.data._id).to.exist;
+					chai.expect(res.body.data.created).to.exist;
+					chai.expect(res.body.data.trial_period_days).to.equal(0);
+					chai.expect(res.body.data.amount).to.equal(planAmount);
+					chai.expect(res.body.data.name).to.equal(planName);
+					chai.expect(res.body.data.currency).to.equal(planCurrency);
+					chai.expect(res.body.data.nickname).to.equal(planNick);
+					chai.expect(res.body.data.interval).to.equal(planInterval);
+
+					StripePlan.findById({_id: res.body.data._id}, (err: Error, planCheck: stripePlan) => {
+						if (err) {
+							done(err);
+							return;
+						}
+						// compare the result with those on the DB
+						chai.expect(planCheck.id).to.equal(res.body.data.id);
+						chai.expect(planCheck.amount).to.equal(res.body.data.amount);
+						chai.expect(planCheck.created).to.equal(res.body.data.created);
+						chai.expect(planCheck.currency).to.equal(res.body.data.currency);
+						chai.expect(planCheck.interval).to.equal(res.body.data.interval);
+						chai.expect(planCheck.name).to.equal(res.body.data.name);
+						chai.expect(planCheck.nickname).to.equal(res.body.data.nickname);
+						chai.expect(planCheck.trial_period_days).to.equal(res.body.data.trial_period_days);
+						done();
+						return;
+					});
 				});
 			});
 		});
