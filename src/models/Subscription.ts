@@ -42,7 +42,7 @@ export  type stripePlan = {
 };
 
 
-/*Mongo Schema*/
+/*Mongo Schemas*/
 const stripePlanSchema = new mongoose.Schema({
 	id: {
 		type: String,
@@ -76,9 +76,6 @@ const stripePlanSchema = new mongoose.Schema({
 	}
 });
 
-
-
-/*Mongo Schema*/
 const stripeSubscription = new mongoose.Schema({
 	id: {
 		type: String,
