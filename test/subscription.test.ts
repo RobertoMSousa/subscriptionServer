@@ -342,7 +342,6 @@ describe("create plans", () => {
 						done(err);
 						return;
 					}
-					console.log("plan-->", res.body.data); // roberto
 
 					chai.expect(res.body.message).to.equal("success");
 					chai.expect(res.body.data).to.exist;
