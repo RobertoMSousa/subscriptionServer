@@ -15,6 +15,9 @@ export namespace Routes {
 		router.route("/signup")
 			.post(authCtrl.signup);
 
+		router.route("/admin")
+			.get(authCtrl.admin);
+
 		return router;
 	}
 }
