@@ -15,7 +15,7 @@ export  type stripeSubscription = {
 	billing: string,
 	billing_cycle_anchor: number,
 	cancel_at_period_end: boolean,
-	canceled_at: number,
+	canceled_at?: number,
 	created: number,
 	current_period_end: number,
 	current_period_start: number,
@@ -99,8 +99,7 @@ const stripeSubscription = new mongoose.Schema({
 		default: false
 	},
 	canceled_at: {
-		type: Number,
-		required: true
+		type: Number
 	},
 	created: {
 		type: Number,
@@ -141,8 +140,5 @@ const stripeSubscription = new mongoose.Schema({
 	}
 });
 
-
-
 export const StripePlan = mongoose.model("StripePlan", stripePlanSchema);
-
 export const StripeSubscription = mongoose.model("StripeSubscription", stripeSubscription);
