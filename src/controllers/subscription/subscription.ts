@@ -5,7 +5,7 @@ import * as passport from "passport";
 import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { WriteError } from "mongodb";
-import { isEmail } from "validator";
+import { isEmail, isNumeric } from "validator";
 import { each } from "async";
 import { Error, Collection } from "mongoose";
 import { userSalt } from "../../models/User";
@@ -19,9 +19,6 @@ const stripe = require("stripe")(process.env.STRIPE_SDK);
 	get the subscriptions of the user
 */
 export const list = (req: Request, res: Response, next: NextFunction) => {
-	console.log("req-->", req); // roberto
-	console.log("session-->", req.session); // roberto
-	console.log("user-->", req.user); // roberto
 	/*
 	TODO: get the list of user subscrition
 	*/
@@ -35,12 +32,11 @@ export const list = (req: Request, res: Response, next: NextFunction) => {
 	build a new user subscription
 */
 export const newSub = (req: Request, res: Response, next: NextFunction) => {
-	console.log("user-->", req.user); // roberto
 	if (!req.body.plan) {
 		res.status(400).json({message: "missing required params", error: undefined, data: undefined});
 		return;
 	}
-	StripeSubscription.find({customer: req.user.stripeId, plan: req.body.plan}, (err: Error, subFind: Array<stripeSubscription>) => {
+	StripeSubscription.find({customer: req.user.stripeId, planId: req.body.plan}, (err: Error, subFind: Array<stripeSubscription>) => {
 		if (err) {
 			res.status(500).json({message: "failed", error: err.message, data: undefined});
 			return;
@@ -68,8 +64,10 @@ export const newSub = (req: Request, res: Response, next: NextFunction) => {
 				object: newSubscription.object,
 				billing: newSubscription.billing,
 				billing_cycle_anchor: newSubscription.billing_cycle_anchor,
+				current_period_start: newSubscription.current_period_start,
+				current_period_end: newSubscription.current_period_end,
 				cancel_at_period_end: newSubscription.cancel_at_period_end,
-				canceled_at: newSubscription.canceled_at,
+				canceled_at: newSubscription.canceled_at ? newSubscription.canceled_at : undefined,
 				created: newSubscription.created,
 				customer: newSubscription.customer,
 				planId: newSubscription.plan.id,
@@ -110,14 +108,20 @@ export const planList = (req: Request, res: Response, next: NextFunction) => {
 */
 export const newPlan = (req: Request, res: Response, next: NextFunction) => {
 
-	if (!req.body.name || !req.body.nickname || !req.body.amount) {
+	if (!req.body.name || !req.body.nickname || !req.body.amount || !req.body.currency || !req.body.interval) {
 		res.status(400).json({message: "missing required params", error: undefined, data: undefined});
 		return;
 	}
+
+	if (!Number.isSafeInteger(req.body.amount)) {
+		res.status(406).json({message: "ammount must be an integer", error: undefined, data: undefined});
+		return;
+	}
+
 	const planMonth = stripe.plans.create({
 		product: {name: req.body.name},
-		currency: "usd",
-		interval: "month",
+		currency: req.body.currency,
+		interval: req.body.interval,
 		nickname: req.body.nickname,
 		amount: req.body.amount,
 	}, (err: Error, planNew: stripePlan) => {

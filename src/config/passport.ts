@@ -75,7 +75,7 @@ export const isAuthorized = (req: Request, res: Response, next: NextFunction) =>
 	if (_.find(req.user.tokens, { kind: provider })) {
 		next();
 	} else {
-		res.redirect(`/auth/admin`);
+		res.redirect(`/auth/signin`);
 	}
 };
 
@@ -85,12 +85,10 @@ export const isAuthorized = (req: Request, res: Response, next: NextFunction) =>
  */
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
 	if (!req.user) {
-		res.redirect(`/auth/admin`);
+		res.redirect(`/auth/signin`);
 		return;
 	}
-	console.log("email-->", req.user.email); // roberto
 	Admin.findOne({"email" : req.user.email}, (err: Error, admin: any) => {
-		console.log("admin-->", admin); // roberto
 		if (err || !admin) {
 			res.redirect(`/auth/admin`);
 			return;
