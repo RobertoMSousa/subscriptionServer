@@ -142,7 +142,6 @@ export const newPlan = (req: Request, res: Response, next: NextFunction) => {
 			trial_period_days: planNew.trial_period_days ? planNew.trial_period_days : 0,
 			name: planNew.name
 		});
-		console.log("plan-->", plan); // roberto
 
 		// save it on the db
 		plan.save();

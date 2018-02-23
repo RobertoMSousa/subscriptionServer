@@ -30,7 +30,6 @@ export const addSource = (req: Request, res: Response) => {
 		res.status(400).json({message: "missing source", error: undefined, data: undefined});
 		return;
 	}
-	console.log("user-->", req.user); // roberto
 	stripe.customers.createSource(req.user.stripeId, {
 		source: req.body.source
 	}, (err: Error, result: any) => {

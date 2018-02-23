@@ -198,7 +198,6 @@ describe("create plans", () => {
 						done(err);
 						return;
 					}
-					console.log("res-->", res.body); // roberto
 
 					chai.expect(res.body.message).to.equal("ammount must be a number");
 
