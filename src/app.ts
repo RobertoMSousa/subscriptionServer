@@ -93,6 +93,7 @@ app.use(express.static(path.join(__dirname, "public"), { maxAge: 31557600000 }))
 import homeRoutes = require("./controllers/home/home-routes");
 import authRoutes = require("./controllers/auth/auth-routes");
 import userRoutes = require("./controllers/user/user-routes");
+import subscriptionRoutes = require("./controllers/subscription/subscription-routes");
 import { read } from "fs";
 
 
@@ -100,5 +101,6 @@ import { read } from "fs";
 app.use("/", homeRoutes.Routes.home());
 app.use("/auth", authRoutes.Routes.auth());
 app.use("/user", userRoutes.Routes.index());
+app.use("/subscription", subscriptionRoutes.Routes.index());
 
 module.exports = app;
