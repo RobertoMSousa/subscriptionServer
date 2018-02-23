@@ -113,15 +113,15 @@ export const newPlan = (req: Request, res: Response, next: NextFunction) => {
 		return;
 	}
 
-	if (!isNumeric(req.body.amount)) {
-		res.status(406).json({message: "ammount must be a number", error: undefined, data: undefined});
+	if (!Number.isSafeInteger(req.body.amount)) {
+		res.status(406).json({message: "ammount must be an integer", error: undefined, data: undefined});
 		return;
 	}
 
 	const planMonth = stripe.plans.create({
 		product: {name: req.body.name},
-		currency: "usd",
-		interval: "month",
+		currency: req.body.currency,
+		interval: req.body.interval,
 		nickname: req.body.nickname,
 		amount: req.body.amount,
 	}, (err: Error, planNew: stripePlan) => {
