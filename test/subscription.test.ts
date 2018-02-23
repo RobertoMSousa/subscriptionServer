@@ -4,10 +4,10 @@ import * as mongo from "connect-mongo";
 import * as crypto from "crypto";
 import * as mongoose from "mongoose";
 
-import { default as User, UserModel, AuthToken } from "../src/models/User";
+import { default as User, UserModel, AuthToken, Admin } from "../src/models/User";
 
 
-import { Admin } from "../src/models/User";
+import { StripePlan, stripePlan } from "../src/models/Subscription";
 
 const chai = require("chai");
 const expect = chai.expect;
