@@ -16,7 +16,7 @@ const stripe = require("stripe")(process.env.STRIPE_SDK);
  * Profile page.
  */
 export const getAccount = (req: Request, res: Response) => {
-	res.status(200).json({message: "this should be only workign if logged in", error: undefined, data: undefined});
+	res.status(200).json({message: "this should be only working if logged in", error: undefined, data: undefined});
 	return;
 };
 
