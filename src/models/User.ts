@@ -43,6 +43,12 @@ const userSchema = new mongoose.Schema({
 	}
 });
 
+
+/*Mongo Schema*/
+const adminSchema = new mongoose.Schema({
+	email: { type: String, unique: true }
+});
+
 /*
 function that salt the user to avoid returning the sensive data
 */
@@ -73,4 +79,5 @@ userSchema.methods.comparePassword = function (candidatePassword: string, cb: (e
 };
 
 const User = mongoose.model("User", userSchema);
+export const Admin = mongoose.model("Admin", adminSchema);
 export default User;
