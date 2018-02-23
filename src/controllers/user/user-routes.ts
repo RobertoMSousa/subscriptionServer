@@ -9,6 +9,9 @@ export namespace Routes {
 		router.route("/account")
 			.get(passportConfig.isAuthenticated, userCtrl.getAccount);
 
+		router.route("/payment/source")
+			.post(passportConfig.isAuthenticated, userCtrl.addSource);
+
 		return router;
 	}
 }
