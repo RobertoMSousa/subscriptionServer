@@ -109,7 +109,6 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
 		stripe.customers.create({
 			email: req.body.email,
 		}, (err: Error, customer: StripeCustomer) => {
-			console.log("customer-->", customer); // roberto
 
 			const user = new User({
 				email: req.body.email,

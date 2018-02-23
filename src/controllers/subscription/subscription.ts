@@ -19,9 +19,6 @@ const stripe = require("stripe")(process.env.STRIPE_SDK);
 	get the subscriptions of the user
 */
 export const list = (req: Request, res: Response, next: NextFunction) => {
-	console.log("req-->", req); // roberto
-	console.log("session-->", req.session); // roberto
-	console.log("user-->", req.user); // roberto
 	/*
 	TODO: get the list of user subscrition
 	*/
@@ -35,7 +32,6 @@ export const list = (req: Request, res: Response, next: NextFunction) => {
 	build a new user subscription
 */
 export const newSub = (req: Request, res: Response, next: NextFunction) => {
-	console.log("user-->", req.user); // roberto
 	if (!req.body.plan) {
 		res.status(400).json({message: "missing required params", error: undefined, data: undefined});
 		return;

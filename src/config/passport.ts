@@ -88,9 +88,7 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
 		res.redirect(`/auth/admin`);
 		return;
 	}
-	console.log("email-->", req.user.email); // roberto
 	Admin.findOne({"email" : req.user.email}, (err: Error, admin: any) => {
-		console.log("admin-->", admin); // roberto
 		if (err || !admin) {
 			res.redirect(`/auth/admin`);
 			return;
