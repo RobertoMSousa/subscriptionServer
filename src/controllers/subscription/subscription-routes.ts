@@ -13,6 +13,10 @@ export namespace Routes {
 		router.route("/new")
 			.post(passportConfig.isAuthenticated, subscription.newSub);
 
+		router.route("/newplan")
+			.post(subscription.newPlan);
+			// .post(passportConfig.isAuthorized, subscription.newPlan);
+
 		return router;
 	}
 }
