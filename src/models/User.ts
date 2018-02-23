@@ -11,6 +11,7 @@ TYPES
 export type UserModel = mongoose.Document & {
 	email: string,
 	password: string,
+	stripeID: string,
 	comparePassword: (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void,
 };
 
@@ -35,6 +36,10 @@ const userSchema = new mongoose.Schema({
 	createdAt: {
 		type: Date,
 		default: Date.now
+	},
+	stripeId: {
+		type: String,
+		required : true
 	}
 });
 
