@@ -77,6 +77,6 @@ export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
 	if (_.find(req.user.tokens, { kind: provider })) {
 		next();
 	} else {
-		res.redirect(`/auth/${provider}`);
+		res.redirect(`/auth/admin`);
 	}
 };
