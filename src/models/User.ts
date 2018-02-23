@@ -11,6 +11,7 @@ TYPES
 export type UserModel = mongoose.Document & {
 	email: string,
 	password: string,
+	stripeID: string,
 	comparePassword: (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void,
 };
 
@@ -35,7 +36,17 @@ const userSchema = new mongoose.Schema({
 	createdAt: {
 		type: Date,
 		default: Date.now
+	},
+	stripeId: {
+		type: String,
+		required : true
 	}
+});
+
+
+/*Mongo Schema*/
+const adminSchema = new mongoose.Schema({
+	email: { type: String, unique: true }
 });
 
 /*
@@ -68,4 +79,5 @@ userSchema.methods.comparePassword = function (candidatePassword: string, cb: (e
 };
 
 const User = mongoose.model("User", userSchema);
+export const Admin = mongoose.model("Admin", adminSchema);
 export default User;

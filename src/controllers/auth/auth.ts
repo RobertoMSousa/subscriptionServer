@@ -6,11 +6,14 @@ import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { WriteError } from "mongodb";
 import { isEmail } from "validator";
-import { each } from "async";
 import { Error } from "mongoose";
+const stripe = require("stripe")(process.env.STRIPE_SDK);
 
 // mode
 import { default as User, UserModel, AuthToken, userSalt } from "../../models/User";
+
+
+import { StripeCustomer } from "../../models/Subscription";
 
 
 
@@ -94,11 +97,6 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
 		return;
 	}
 
-	const user = new User({
-		email: req.body.email,
-		password: req.body.password
-	});
-
 	User.findOne({ email: req.body.email }, (err: Error, existingUser) => {
 		if (err) {
 			return next(err);
@@ -107,18 +105,42 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
 			res.status(302).json({message: "user already exist", error: undefined, data: undefined});
 			return;
 		}
-		user.save((err) => {
-			if (err) {
-				return next(err);
-			}
-			req.logIn(user, (err: Error) => {
+
+		stripe.customers.create({
+			email: req.body.email,
+		}, (err: Error, customer: StripeCustomer) => {
+			console.log("customer-->", customer); // roberto
+
+			const user = new User({
+				email: req.body.email,
+				password: req.body.password,
+				stripeId: customer.id
+			});
+
+			user.save((err) => {
 				if (err) {
-					res.status(500).json({message: undefined, error: err.message, data: undefined});
-					return;
+					return next(err);
 				}
-				res.status(200).json({message: "account created", error: undefined, data: userSalt(<UserModel> user) });
-				return;
+				req.logIn(user, (err: Error) => {
+					if (err) {
+						res.status(500).json({message: undefined, error: err.message, data: undefined});
+						return;
+					}
+					res.status(200).json({message: "account created", error: undefined, data: userSalt(<UserModel> user) });
+					return;
+				});
 			});
 		});
 	});
+};
+
+
+
+
+
+export const admin = (req: Request, res: Response, next: NextFunction) => {
+	/*
+	TODO: need to implement the login as admin route
+	*/
+	res.status(200).json({message: "admin login page", error: undefined, data: undefined });
 };
