@@ -17,6 +17,9 @@ export namespace Routes {
 			.post(subscription.newPlan);
 			// .post(passportConfig.isAuthorized, subscription.newPlan);
 
+		router.route("/plan/list")
+			.get(passportConfig.isAuthenticated, subscription.planList);
+
 		return router;
 	}
 }
