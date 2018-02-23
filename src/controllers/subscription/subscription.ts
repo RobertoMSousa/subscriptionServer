@@ -5,7 +5,7 @@ import * as passport from "passport";
 import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { WriteError } from "mongodb";
-import { isEmail } from "validator";
+import { isEmail, isNumeric } from "validator";
 import { each } from "async";
 import { Error, Collection } from "mongoose";
 import { userSalt } from "../../models/User";
@@ -112,6 +112,12 @@ export const newPlan = (req: Request, res: Response, next: NextFunction) => {
 		res.status(400).json({message: "missing required params", error: undefined, data: undefined});
 		return;
 	}
+
+	if (!isNumeric(req.body.amount)) {
+		res.status(406).json({message: "ammount must be a number", error: undefined, data: undefined});
+		return;
+	}
+
 	const planMonth = stripe.plans.create({
 		product: {name: req.body.name},
 		currency: "usd",
@@ -136,6 +142,7 @@ export const newPlan = (req: Request, res: Response, next: NextFunction) => {
 			trial_period_days: planNew.trial_period_days ? planNew.trial_period_days : 0,
 			name: planNew.name
 		});
+		console.log("plan-->", plan); // roberto
 
 		// save it on the db
 		plan.save();
