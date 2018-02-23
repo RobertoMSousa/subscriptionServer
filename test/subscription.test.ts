@@ -199,8 +199,97 @@ describe("create plans", () => {
 						return;
 					}
 
-					chai.expect(res.body.message).to.equal("ammount must be a number");
+					chai.expect(res.body.message).to.equal("ammount must be an integer");
 
+					done();
+					return;
+				});
+			});
+		});
+	});
+	it("should not be able to create a plan without a valid interval", (done) => {
+		createFakeAdmin((err: Error) => {
+			request(app).post("/auth/signin")
+			.set("Accept", "application/json")
+			.set("Content-Type", "application/json")
+			.send({
+				"email": "admin@mail.com",
+				"password": "123"
+			})
+			.expect(200)
+			.expect("Content-Type", /json/)
+			.expect("set-cookie", /connect.sid/)
+			.end(function (err, res) {
+				if (err) {
+					done(err);
+					return;
+				}
+
+				chai.expect(res.body.message).to.equal("login with success");
+
+				request(app).post("/subscription/newplan")
+				.set("Accept", "application/json")
+				.set("Cookie", res.header["set-cookie"])
+				.set("Content-Type", "application/json")
+				.send({
+					"name": "name",
+					"nickname": "nick",
+					"amount": 10,
+					"currency": "usd",
+					"interval": "shjdshjdshjd"
+				})
+				.expect(500)
+				.end(function (err, res) {
+					if (err) {
+						done(err);
+						return;
+					}
+					chai.expect(res.body.data).to.not.exist;
+					done();
+					return;
+				});
+			});
+		});
+	});
+
+	it("should not be able to create a plan without a valid currency", (done) => {
+		createFakeAdmin((err: Error) => {
+			request(app).post("/auth/signin")
+			.set("Accept", "application/json")
+			.set("Content-Type", "application/json")
+			.send({
+				"email": "admin@mail.com",
+				"password": "123"
+			})
+			.expect(200)
+			.expect("Content-Type", /json/)
+			.expect("set-cookie", /connect.sid/)
+			.end(function (err, res) {
+				if (err) {
+					done(err);
+					return;
+				}
+
+				chai.expect(res.body.message).to.equal("login with success");
+
+				request(app).post("/subscription/newplan")
+				.set("Accept", "application/json")
+				.set("Cookie", res.header["set-cookie"])
+				.set("Content-Type", "application/json")
+				.send({
+					"name": "name",
+					"nickname": "nick",
+					"amount": 10,
+					"currency": "asdasdf",
+					"interval": "month"
+				})
+				.expect(500)
+				.end(function (err, res) {
+					if (err) {
+						done(err);
+						return;
+					}
+					chai.expect(res.body.data).to.not.exist;
 					done();
 					return;
 				});
