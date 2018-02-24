@@ -90,7 +90,7 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
 	}
 	Admin.findOne({"email" : req.user.email}, (err: Error, admin: any) => {
 		if (err || !admin) {
-			res.redirect(`/auth/admin`);
+			res.redirect(`/admin`);
 			return;
 		}
 		next();

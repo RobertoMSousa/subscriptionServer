@@ -132,14 +132,3 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
 		});
 	});
 };
-
-
-
-
-
-export const admin = (req: Request, res: Response, next: NextFunction) => {
-	/*
-	TODO: need to implement the login as admin route
-	*/
-	res.status(200).json({message: "admin login page", error: undefined, data: undefined });
-};
