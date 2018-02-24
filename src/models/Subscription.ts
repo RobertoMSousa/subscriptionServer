@@ -29,6 +29,7 @@ export  type stripeSubscription = {
 };
 
 export  type stripePlan = {
+	_id: mongoose.Schema.Types.ObjectId,
 	id: string,
 	object: string,
 	amount: number,
