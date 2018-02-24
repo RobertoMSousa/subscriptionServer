@@ -104,6 +104,26 @@ function createPlan(cookie: string, name: string, nickname: string, amount: numb
 	});
 }
 
+describe("create subscriptions", () => {
+	/*
+	clean up the test db before and after the
+	test just to be sure that the tests are really
+	independent from each others
+	*/
+
+	beforeEach(() => {
+		if (mongoose.connection && mongoose.connection.db) {
+			mongoose.connection.db.dropDatabase();
+		}
+	});
+	afterAll(() => {
+		if (mongoose.connection && mongoose.connection.db) {
+			mongoose.connection.db.dropDatabase();
+		}
+	});
+});
+
+
 
 describe("create plans", () => {
 
