@@ -113,7 +113,7 @@ describe("create plans", () => {
 	*/
 
 	beforeEach(() => {
-		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
 		if (mongoose.connection && mongoose.connection.db) {
 			mongoose.connection.db.dropDatabase();
 		}
@@ -576,7 +576,6 @@ describe("create plans", () => {
 									return;
 								}
 								chai.expect(res.body.message).to.equal("logout success");
-								// console.log("cookie-->", res.header["set-cookie"]); // roberto
 								chai.expect(res.header["set-cookie"]).to.not.exist;
 
 								// create the fake user acccount
