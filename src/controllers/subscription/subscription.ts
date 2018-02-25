@@ -77,7 +77,7 @@ export const newSub = (req: Request, res: Response, next: NextFunction) => {
 				trial_start: newSubscription.trial_start ? newSubscription.trial_start : undefined
 			});
 			newSubsData.save();
-			res.status(200).json({message: "success", error: undefined, data: newSubscription});
+			res.status(200).json({message: "success", error: undefined, data: newSubsData});
 			return;
 		});
 	});
