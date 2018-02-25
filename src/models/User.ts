@@ -11,7 +11,7 @@ TYPES
 export type UserModel = mongoose.Document & {
 	email: string,
 	password: string,
-	stripeID: string,
+	stripeId: string,
 	comparePassword: (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void,
 };
 

@@ -1,0 +1,247 @@
+swagger: "2.0"
+info:
+  description: "API that create allow to create user, associate payments and create subscriptions"
+  version: "0.1"
+  title: "my subscription API"
+  contact:
+    email: "beto.sousa22@gmail.com"
+host: "localhost:8080"
+
+
+tags:
+- name: "auth"
+  description: "routes responsible for the authorization part of the app"
+
+- name: "home"
+  description: "main home routes"
+
+- name: "user"
+  description: "route reponsible with all the user related functions"
+  
+- name: "subscription"
+  description: "route responsible to create, delete, etc subscriptions"
+
+- name: "admin"
+  description: "all the routes for admin of the page"
+
+- name: "plan"
+  description: "all the routes for admin of the page"
+
+paths:
+  "/auth/signin":
+    post:
+          tags:
+          - "auth"
+          summary: "sign in user into the platform"
+          description: ""
+          parameters:
+          - in: "body"
+            name: "body"
+            description: ""
+            required: true
+            schema:
+              $ref: "#/definitions/SignIn"
+          responses:
+            default:
+              description: "successful operation"
+
+  "/auth/signout":
+    get:
+      tags:
+      - "auth"
+      summary: "send a sign out request"
+      description: ""
+      responses:
+        default:
+          description: "successful operation"
+
+  "/auth/signup":
+    post:
+      tags:
+      - "auth"
+      summary: "register new user"
+      description: "register new user on the app"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SignUp"
+      responses:
+        default:
+          description: "successful operation"
+
+  "/admin":
+    get:
+      tags:
+      - "admin"
+      summary: "show admin login required message"
+      description: "display a message when the user try to do something that is only allowed to admin"
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+
+
+  "/home":
+    get:
+      tags:
+      - "home"
+      summary: "show the nothing to see here page"
+      description: "This page is displayed when the user tried to access the server"
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+  
+  "/user/account":
+    get:
+      tags:
+      - "user"
+      summary: "get the user account data"
+      description: "Page that server the user data, only shown if authenticated"
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+
+  "/user/payment/source":
+    post:
+      tags:
+      - "user"
+      summary: "add or update the user payment source"
+      description: "receives the user payment source and  updates that value on stipe"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/paymentSource"
+      responses:
+        default:
+          description: "successful operation"
+  
+  "/subscription/list/{userId}":
+    get:
+      tags:
+      - "subscription"
+      summary: "the list of subscriptions for the user Foo"
+      description: ""
+      produces:
+      - "application/json"
+      # parameters:
+      #  - in: "path"
+      #     name: "userId"
+      #     schema:
+      #       type: "string"
+      responses:
+        default:
+          description: "successful operation"
+
+  "/subscription/new":
+    post:
+      tags:
+      - "subscription"
+      summary: "add a new subscription to the user"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/newSubscription"
+      responses:
+        default:
+          description: "successful operation"
+
+  "/plan/new":
+    post:
+      tags:
+      - "plan"
+      summary: "create a new plan"
+      description: "admin only route that creates a new plan"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/newPlan"
+      responses:
+        default:
+          description: "successful operation"
+
+  "/plan/list":
+    get:
+      tags:
+      - "plan"
+      summary: "get the list of plans"
+      description: "list of all the plans"
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+
+
+definitions:
+
+  SignUp:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        password: 
+          type: "string"
+        passwordRepeated: 
+          type: "string"
+
+  SignIn:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password: 
+        type: "string"
+
+  paymentSource:
+    type: "object"
+    properties:
+      source:
+        type: "string"
+
+  newSubscription:
+    type: "object"
+    properties:
+      plan:
+        type: "string"
+        required: true
+
+  newPlan:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        required: true
+      nickname:
+        type: "string"
+        required: true
+      amount:
+        type: "number"
+        required: true
+      currency:
+        type: "string"
+        required: true
+      interval:
+        type: "string"
+        required: true
