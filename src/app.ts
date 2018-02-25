@@ -9,6 +9,7 @@ import * as path from "path";
 import * as mongoose from "mongoose";
 import * as passport from "passport";
 import * as bluebird from "bluebird";
+import { read } from "fs";
 
 
 const MongoStore = mongo(session);
@@ -95,7 +96,7 @@ import authRoutes = require("./controllers/auth/auth-routes");
 import userRoutes = require("./controllers/user/user-routes");
 import adminRoutes = require("./controllers/admin/admin-routes");
 import subscriptionRoutes = require("./controllers/subscription/subscription-routes");
-import { read } from "fs";
+import planRoutes = require("./controllers/plan/plan-routes");
 
 
 // add your routes
@@ -104,5 +105,6 @@ app.use("/auth", authRoutes.Routes.auth());
 app.use("/user", userRoutes.Routes.index());
 app.use("/subscription", subscriptionRoutes.Routes.index());
 app.use("/admin", adminRoutes.Routes.index());
+app.use("/plan", planRoutes.Routes.index());
 
 module.exports = app;
