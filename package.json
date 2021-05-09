@@ -43,7 +43,7 @@
     "express": "^4.17.1",
     "express-flash": "0.0.2",
     "express-session": "^1.16.2",
-    "lodash": "^4.17.14",
+    "lodash": "^4.17.21",
     "mongoose": "^4.13.7",
     "node-sass": "^4.12.0",
     "passport": "^0.4.0",
