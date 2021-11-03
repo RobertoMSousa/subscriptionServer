@@ -53,7 +53,7 @@
     "stripe": "^7.4.0",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
-    "validator": "^11.1.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@types/async": "^3.0.0",
